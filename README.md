@@ -25,12 +25,12 @@ flowchart LR
 
 ---
 
-## What we built
+## Components
 
 | Piece | What it does |
 |-------|----------------|
 | **Attacker** | 5 mutation operators + epsilon-greedy selection; escalates to GPT-4o-mini when Groq attacker can't break the target |
-| **Target** | Groq Llama 3.1 8B — the model we're trying to break |
+| **Target** | Groq Llama 3.1 8B — weak model under test |
 | **Judges** | 3-model panel (Groq 70B, Cerebras GPT-OSS 120B, Groq Qwen3) with Pydantic structured output |
 | **Meta-judge** | GPT-4o-mini tiebreaker when judges disagree or error |
 | **Tool-use** | 6 mock tools (`calculator`, `weather_api`, etc.) via LangChain `@tool` + `bind_tools` |
@@ -43,7 +43,7 @@ flowchart LR
 
 ---
 
-## Results (v3.1)
+## Results 
 
 | | |
 |---|---|
@@ -71,7 +71,6 @@ OPENAI_API_KEY=...
 ```
 
 ```bash
-python preflight.py              # sanity check
 python main.py                   # full run (30 seeds)
 python main.py --seed tool-002 --force   # single seed
 python validate.py               # dataset QA
