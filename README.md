@@ -1,6 +1,6 @@
 # AdversaBench
 
-Automated LLM red-teaming benchmark. Takes seed prompts, mutates them adversarially, runs a weak target model, scores failures with a multi-judge panel, and exports a publication-ready failure dataset.
+Automated LLM red-teaming benchmark. Takes seed prompts, mutates them adversarially, runs a weak target model, scores failures with a multi-judge panel, and exports a tiered failure dataset.
 
 Built with **LangGraph** + **LangChain** (`ChatGroq`, `ChatOpenAI`, structured output, tool binding).
 
@@ -35,7 +35,7 @@ flowchart LR
 | **Meta-judge** | GPT-4o-mini tiebreaker when judges disagree or error |
 | **Tool-use** | 6 mock tools (`calculator`, `weather_api`, etc.) via LangChain `@tool` + `bind_tools` |
 | **Datasets** | Tiered export — clean (unanimous) and verified (+ meta-judge) |
-| **Audit** | GPT-4o-mini scores each clean row 1–5 for publication quality |
+| **Audit** | GPT-4o-mini scores each clean row 1–5 |
 
 **30 seeds** — 10 reasoning, 10 instruction-following, 10 tool-use. Each has `expected_behavior` and `reference_answer` ground truth.
 
@@ -119,7 +119,7 @@ models.py        Pydantic schemas (JudgeVerdict, AttackerOutput, …)
 tools.py         mock tools for tool_use seeds
 config.yaml      models, paths, iteration limits
 seeds.json       30 seeds with ground truth
-audit.py         OpenAI publication-quality scoring
+audit.py         scores clean tier rows with OpenAI
 validate.py      dataset QA
 preflight.py     pre-run smoke tests
 ```
