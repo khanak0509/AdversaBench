@@ -70,7 +70,9 @@ flowchart LR
 
 ## Inter-judge reliability
 
-Post-run analysis on saved verdicts in `dataset.json` — no extra API calls.
+This analysis follows the evaluation methodology from [Zheng et al. 2023](https://arxiv.org/abs/2306.05685) (*Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena*), adapting Cohen's κ for single-response verdict reliability rather than pairwise preference.
+
+Post-run analysis on saved verdicts in `dataset.json` 
 
 ```bash
 python inter_judge_analysis.py
@@ -216,6 +218,11 @@ python main.py --force-all              # re-run everything
 
 ---
 
+## References
+
+- [Zheng et al. 2023 — Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena](https://arxiv.org/abs/2306.05685)
+
+---
 
 ## License
 
