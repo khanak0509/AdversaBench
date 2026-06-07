@@ -1,4 +1,3 @@
-# Pick and apply mutation operators for the attacker
 import random
 from typing import Literal
 
