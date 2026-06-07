@@ -56,6 +56,18 @@ flowchart LR
 
 ---
 
+## Findings
+
+**Most effective operators** — `inject_distractor` (9/30, 30%) and `role_flip` (8/30, 27%) produced the most final breaks. `constraint_add` was third (7/30). `jailbreak_wrap` only stuck twice, both on instruction-following seeds.
+
+**Hardest category** — not failure rate (all 30 broke), but **iteration cost**. Instruction-following averaged **2.4 iterations** to confirm vs **1.1** for reasoning and tool-use. Only **4/10** instruction seeds broke on the first try; **9/10** reasoning and tool-use seeds broke immediately.
+
+**Judge disagreement** — **Qwen3** was the most lenient judge: 3 cases where it voted pass while another judge voted fail. **6/7** verified-tier rows (meta-judge tiebreak) were instruction-following. Cerebras also dissented 3 times on pass votes.
+
+**Multi-step mutations** — 8 seeds needed 2+ attacker iterations. Stacking operators on instruction seeds was common (e.g. `inject_distractor → role_flip → constraint_add` on instruction-002).
+
+---
+
 ## Quick start
 
 ```bash
