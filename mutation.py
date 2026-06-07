@@ -159,7 +159,7 @@ Previous prompt:
 {current_prompt}
 
 Target answer:
-{target_response[:600]}
+{target_response}
 
 Judge notes:
 {judge_feedback}
