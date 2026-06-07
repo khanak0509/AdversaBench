@@ -1,0 +1,36 @@
+max_iterations: 5
+epsilon: 0.2
+seed_sleep_seconds: 6
+api_sleep_seconds: 2
+
+models:
+  attacker: groq/llama-3.3-70b-versatile
+  attacker_escalation:
+    model: openai/gpt-4o-mini
+    from_iteration: 2
+    temperature: 0.7
+  target: groq/llama-3.1-8b-instant
+  meta_judge:
+    name: openai-meta
+    model: openai/gpt-4o-mini
+  judges:
+    - name: llama-70b
+      model: groq/llama-3.3-70b-versatile
+    - name: cerebras-gpt-oss
+      model: cerebras/gpt-oss-120b
+    - name: qwen3
+      model: groq/qwen/qwen3-32b
+
+paths:
+  seeds: seeds.json
+  output: output/dataset.json
+  output_clean: output/dataset_clean.json
+  output_verified: output/dataset_verified.json
+  checkpoint: output/checkpoint.json
+
+judge_fallback:
+  model: groq/llama-3.3-70b-versatile
+  name: llama-70b-fallback
+
+save_weak_consensus: false
+save_verified: true
