@@ -62,9 +62,66 @@ flowchart LR
 
 **Hardest category** — not failure rate (all 30 broke), but **iteration cost**. Instruction-following averaged **2.4 iterations** to confirm vs **1.1** for reasoning and tool-use. Only **4/10** instruction seeds broke on the first try; **9/10** reasoning and tool-use seeds broke immediately.
 
-**Judge disagreement** — **Qwen3** was the most lenient judge: 3 cases where it voted pass while another judge voted fail. **6/7** verified-tier rows (meta-judge tiebreak) were instruction-following. Cerebras also dissented 3 times on pass votes.
+**Judge disagreement** — **Qwen3** and **Cerebras** were the most lenient (3 pass votes each vs 1 for Llama 70B). **6/7** verified-tier rows (meta-judge tiebreak) were instruction-following. See [inter-judge reliability](#inter-judge-reliability) for the full breakdown.
 
 **Multi-step mutations** — 8 seeds needed 2+ attacker iterations. Stacking operators on instruction seeds was common (e.g. `inject_distractor → role_flip → constraint_add` on instruction-002).
+
+---
+
+## Inter-judge reliability
+
+Post-run analysis on saved verdicts in `dataset.json` — no extra API calls.
+
+```bash
+python inter_judge_analysis.py
+```
+
+### Judge leniency
+
+| Judge | Pass | Fail | Leniency |
+|-------|------|------|----------|
+| Llama 70B | 1 | 29 | 3% |
+| Cerebras GPT-OSS 120B | 3 | 27 | 10% |
+| Qwen3 32B | 3 | 27 | 10% |
+
+Leniency = pass votes / 30. High leniency means the judge misses real failures. Llama 70B is the strictest; Cerebras and Qwen3 each let 3 confirmed failures through on their own.
+
+### Pairwise agreement
+
+| Judge pair | Agreement | Cohen's κ |
+|------------|-----------|-----------|
+| Llama 70B × Cerebras 120B | 87% | −0.053 |
+| Llama 70B × Qwen3 32B | 87% | −0.053 |
+| Cerebras 120B × Qwen3 32B | 80% | −0.111 |
+
+### The κ paradox
+
+87% agreement with κ ≈ 0 looks contradictory. It isn't a bug — κ corrects for agreement you'd expect by chance alone:
+
+$$
+\kappa = \frac{P_o - P_e}{1 - P_e}
+$$
+
+- \(P_o\) — observed agreement (how often two judges pick the same verdict)
+- \(P_e\) — expected agreement if each judge voted independently at their own fail/pass rates
+
+When almost every row is **fail** (90–97% base rate), \(P_e\) is already ~85%. Two judges agree on most rows because failures dominate, not because they're evaluating the same way. κ then says: you only beat chance by a few points → near zero.
+
+κ is designed for roughly balanced labels. With a 90%+ failure rate, raw **disagreement rate by category** is the more informative signal.
+
+### Where judges actually diverge
+
+| Category | Seeds | Disagreements | Disagreement rate |
+|----------|-------|---------------|-------------------|
+| reasoning | 10 | 0 | 0% |
+| tool_use | 10 | 2 | 20% |
+| instruction_following | 10 | 5 | 50% |
+
+High pairwise agreement masks real splits on hard cases. Reasoning failures are obvious — all three judges fail every row, so agreement is trivial. Instruction-following is ambiguous: half the rows split the panel. That category difficulty — not judge leniency alone — drives multi-judge divergence.
+
+This is why the meta-judge exists: unanimous consensus works on clear failures; instruction-following needs a tiebreaker when judges genuinely disagree.
+
+Full numbers saved to `judge_analysis.json`.
 
 ---
 
@@ -87,6 +144,7 @@ python main.py                   # full run (30 seeds)
 python main.py --seed tool-002 --force   # single seed
 python validate.py               # dataset QA
 python audit.py                  # score clean tier
+python inter_judge_analysis.py   # judge leniency + agreement stats
 ```
 
 ---
@@ -133,6 +191,7 @@ seeds.json       30 seeds with ground truth
 audit.py         scores clean tier rows with OpenAI
 validate.py      dataset QA
 preflight.py     pre-run smoke tests
+inter_judge_analysis.py   leniency, pairwise agreement, Cohen's κ
 ```
 
 ---
