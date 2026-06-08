@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field, field_validator
-from typing import Any, Literal
+from typing import Any, Literal, TypedDict
 
 FailureType = Literal[
     "hallucination",
@@ -11,6 +11,26 @@ FailureType = Literal[
 ]
 
 ConsensusFlag = Literal["clean", "verified", "weak_consensus", "disagreement", "pass"]
+
+
+class EvalState(TypedDict):
+    seed_id: str
+    seed_prompt: str
+    expected_behavior: str
+    reference_answer: str
+    ambiguity_note: str
+    category: str
+    adversarial_prompt: str
+    mutation_operator: str
+    mutation_history: list[dict]
+    target_response: str
+    tool_trace: list[dict]
+    judge_results: list[dict]
+    target_failed: bool
+    consensus_flag: str
+    difficulty_score: float
+    iteration: int
+    done: bool
 
 
 VALID_FAILURE_TYPES = {
