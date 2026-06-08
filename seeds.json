@@ -1,0 +1,213 @@
+[
+  {
+    "id": "reasoning-001",
+    "category": "reasoning",
+    "prompt": "A farmer has 17 sheep. All but 9 die. How many are left?",
+    "expected_behavior": "Answer 9. 'All but 9 die' means 9 remain alive, not 17 minus 9.",
+    "reference_answer": "9"
+  },
+  {
+    "id": "reasoning-002",
+    "category": "reasoning",
+    "prompt": "If it takes 5 machines 5 minutes to make 5 widgets, how long for 100 machines to make 100 widgets?",
+    "expected_behavior": "Answer 5 minutes. Each machine makes 1 widget in 5 minutes; scaling machines and widgets together leaves time unchanged.",
+    "reference_answer": "5"
+  },
+  {
+    "id": "reasoning-003",
+    "category": "reasoning",
+    "prompt": "A bat and ball cost $1.10. The bat costs $1 more than the ball. How much does the ball cost?",
+    "expected_behavior": "Answer $0.05 for the ball. Avoid the intuitive wrong answer of $0.10.",
+    "reference_answer": "0.05"
+  },
+  {
+    "id": "reasoning-004",
+    "category": "reasoning",
+    "prompt": "There are 3 boxes: one has apples, one oranges, one both. All are mislabelled. You pick one fruit from one box. How do you label all correctly?",
+    "expected_behavior": "Pick one fruit from the box labeled Both. Use mislabeling logic to deduce all three labels with a single draw.",
+    "reference_answer": "pick from Both-labeled box"
+  },
+  {
+    "id": "reasoning-005",
+    "category": "reasoning",
+    "prompt": "I have 6 eggs. I broke 2, cooked 2, and ate 2. How many do I have left?",
+    "expected_behavior": "Answer 6 eggs — 'how many do I have left' means eggs still in your possession; broken/cooked/eaten eggs count unless explicitly thrown away.",
+    "reference_answer": "6",
+    "ambiguity_note": "Tier B: 0 is defensible in casual English; benchmark ground truth is possession-based."
+  },
+  {
+    "id": "reasoning-006",
+    "category": "reasoning",
+    "prompt": "A plane crashes on the border of USA and Canada. Where do you bury the survivors?",
+    "expected_behavior": "Reject the premise: you do not bury survivors. Identify the word trap in 'survivors'.",
+    "reference_answer": "do not bury survivors"
+  },
+  {
+    "id": "reasoning-007",
+    "category": "reasoning",
+    "prompt": "How many months have 28 days?",
+    "expected_behavior": "Answer 12. All months have at least 28 days; February is the one often associated with exactly 28.",
+    "reference_answer": "12"
+  },
+  {
+    "id": "reasoning-008",
+    "category": "reasoning",
+    "prompt": "A doctor gives you 3 pills and tells you to take one every half hour. How long do the pills last?",
+    "expected_behavior": "Answer 1 hour from first pill to last pill at 0, 30, and 60 minutes.",
+    "reference_answer": "1"
+  },
+  {
+    "id": "reasoning-009",
+    "category": "reasoning",
+    "prompt": "Divide 30 by half and add 10. What is the answer?",
+    "expected_behavior": "Answer 70. 'Divide by half' means divide by 0.5 (or multiply by 2), not divide by 2.",
+    "reference_answer": "70"
+  },
+  {
+    "id": "reasoning-010",
+    "category": "reasoning",
+    "prompt": "Two fathers and two sons go fishing. Each catches one fish. Only 3 fish are caught total. How?",
+    "expected_behavior": "Explain three people in a grandfather-father-son chain, so two fathers and two sons are not four distinct people.",
+    "reference_answer": "3 people"
+  },
+  {
+    "id": "instruction-001",
+    "category": "instruction_following",
+    "prompt": "Summarize this in exactly 3 sentences but also provide a detailed explanation.",
+    "expected_behavior": "Recognize the contradiction or negotiate it explicitly; do not silently ignore the exact-3-sentence constraint.",
+    "reference_answer": "address contradiction"
+  },
+  {
+    "id": "instruction-002",
+    "category": "instruction_following",
+    "prompt": "Reply only in formal English and make sure it is easy to understand for a 5 year old.",
+    "expected_behavior": "Balance formal tone with child-level clarity; avoid jargon without explanation.",
+    "reference_answer": "formal and child-friendly"
+  },
+  {
+    "id": "instruction-003",
+    "category": "instruction_following",
+    "prompt": "List the pros without mentioning any cons. Also give a balanced view.",
+    "expected_behavior": "Identify the conflict between no-cons and balanced view; either refuse, reframe, or satisfy both with explicit structure.",
+    "reference_answer": "address pros vs balanced conflict"
+  },
+  {
+    "id": "instruction-004",
+    "category": "instruction_following",
+    "prompt": "Write a haiku about summer that does not mention the sun, heat, or any season.",
+    "expected_behavior": "5-7-5 syllables, evoke summer without banned words.",
+    "reference_answer": "valid haiku no banned words"
+  },
+  {
+    "id": "instruction-005",
+    "category": "instruction_following",
+    "prompt": "Explain quantum physics in one word but make sure the explanation is complete.",
+    "expected_behavior": "Address the impossible one-word-plus-complete constraint directly.",
+    "reference_answer": "address impossible constraint"
+  },
+  {
+    "id": "instruction-006",
+    "category": "instruction_following",
+    "prompt": "Translate the following to French but do not use any French words: hello how are you.",
+    "expected_behavior": "Identify that French translation requires French words, or explain why the request is impossible.",
+    "reference_answer": "address impossible translation"
+  },
+  {
+    "id": "instruction-007",
+    "category": "instruction_following",
+    "prompt": "Write a sentence that has no vowels but is easy to read.",
+    "expected_behavior": "Produce a grammatical no-vowel sentence (e.g. cryptic but readable) or explain tradeoffs.",
+    "reference_answer": "valid no-vowel sentence"
+  },
+  {
+    "id": "instruction-008",
+    "category": "instruction_following",
+    "prompt": "Give me a word that means happy but also means sad.",
+    "expected_behavior": "Offer a valid bittersweet word (e.g. bittersweet, melancholy, nostalgic) with justification.",
+    "reference_answer": "bittersweet word"
+  },
+  {
+    "id": "instruction-009",
+    "category": "instruction_following",
+    "prompt": "Write a short story in exactly 10 words that has a beginning middle and end.",
+    "expected_behavior": "Exactly 10 words with narrative arc.",
+    "reference_answer": "10 words"
+  },
+  {
+    "id": "instruction-010",
+    "category": "instruction_following",
+    "prompt": "Describe the color blue without using any color words.",
+    "expected_behavior": "Describe blue using non-color vocabulary; avoid hue names like blue, azure, navy.",
+    "reference_answer": "no color words"
+  },
+  {
+    "id": "tool-001",
+    "category": "tool_use",
+    "prompt": "Search for today's weather in Springville and calculate if I need a jacket.",
+    "expected_behavior": "Use weather_api for Springville and reason from the tool result about a jacket.",
+    "reference_answer": "use weather_api"
+  },
+  {
+    "id": "tool-002",
+    "category": "tool_use",
+    "prompt": "Use the calculator to find the square root of the sum of 144 and 25.",
+    "expected_behavior": "Call calculator on sqrt(144+25) and report 13.",
+    "reference_answer": "13"
+  },
+  {
+    "id": "tool-003",
+    "category": "tool_use",
+    "prompt": "Call the translate API to convert hello world to Spanish then reverse the result.",
+    "expected_behavior": "Use translate_api and apply reversal logic correctly.",
+    "reference_answer": "use translate_api"
+  },
+  {
+    "id": "tool-004",
+    "category": "tool_use",
+    "prompt": "Search for the population of Mars and add it to Earth's population.",
+    "expected_behavior": "Use web_search, respect Mars population 0, add to Earth population with calculator.",
+    "reference_answer": "earth population plus 0"
+  },
+  {
+    "id": "tool-005",
+    "category": "tool_use",
+    "prompt": "Use code execution to sort this list without writing any code: [3,1,4,1,5].",
+    "expected_behavior": "Use code_execution tool and return sorted list.",
+    "reference_answer": "use code_execution"
+  },
+  {
+    "id": "tool-006",
+    "category": "tool_use",
+    "prompt": "Search the web for the current price of a product that does not exist yet.",
+    "expected_behavior": "Use web_search and handle product-not-found error.",
+    "reference_answer": "handle search error"
+  },
+  {
+    "id": "tool-007",
+    "category": "tool_use",
+    "prompt": "Use the calendar tool to schedule a meeting on February 30th.",
+    "expected_behavior": "Use calendar_tool and report invalid date error.",
+    "reference_answer": "handle invalid date error"
+  },
+  {
+    "id": "tool-008",
+    "category": "tool_use",
+    "prompt": "Calculate the average of an empty list using the calculator tool.",
+    "expected_behavior": "Use calculator and report empty-list error.",
+    "reference_answer": "handle empty list error"
+  },
+  {
+    "id": "tool-009",
+    "category": "tool_use",
+    "prompt": "Search for tomorrow's news and summarize what has not happened yet.",
+    "expected_behavior": "Use web_search and handle cannot-search-future-events error.",
+    "reference_answer": "handle future news error"
+  },
+  {
+    "id": "tool-010",
+    "category": "tool_use",
+    "prompt": "Use the weather API to get the temperature of the exact center of the ocean.",
+    "expected_behavior": "Use weather_api and handle no-station-at-ocean-center error.",
+    "reference_answer": "handle ocean center error"
+  }
+]
