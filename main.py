@@ -21,6 +21,10 @@ from tools import LANGCHAIN_TOOLS, TOOL_BY_NAME
 
 load_dotenv()
 
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+CEREBRAS_API_KEY = os.getenv("CEREBRAS_API_KEY")
+
 with open("config.yaml") as f:
     CONFIG = yaml.safe_load(f)
 
@@ -41,9 +45,6 @@ SAVE_WEAK = CONFIG.get("save_weak_consensus", False)
 SAVE_VERIFIED = CONFIG.get("save_verified", True)
 RUN_VERSION = "3.1"
 
-ATTACKER_KEY = "GROQ_API_KEY_ATTACKER"
-TARGET_KEY = "GROQ_API_KEY_TARGET"
-
 ATTACKER_ESCALATION = CONFIG["models"].get("attacker_escalation")
 META_JUDGE_CFG = CONFIG["models"].get("meta_judge")
 CEREBRAS_BASE = "https://api.cerebras.ai/v1"
@@ -58,7 +59,7 @@ def escalation_active(iteration: int) -> bool:
 def meta_judge_enabled() -> bool:
     if not META_JUDGE_CFG:
         return False
-    return bool(os.getenv(META_JUDGE_CFG.get("api_key_env", "OPENAI_API_KEY"), "").strip())
+    return bool(OPENAI_API_KEY)
 
 
 class EvalState(TypedDict):
@@ -145,13 +146,11 @@ def attacker_node(state: EvalState) -> dict:
 
     if escalated and ATTACKER_ESCALATION:
         attacker_model = ATTACKER_ESCALATION["model"]
-        attacker_key = ATTACKER_ESCALATION["api_key_env"]
         max_tokens = 800
         temperature = float(ATTACKER_ESCALATION.get("temperature", 0.7))
         tag = " · openai"
     else:
         attacker_model = ATTACKER_MODEL
-        attacker_key = ATTACKER_KEY
         max_tokens = 800
         temperature = 0.3
         tag = ""
@@ -160,14 +159,14 @@ def attacker_node(state: EvalState) -> dict:
     if attacker_model.startswith("openai/"):
         llm = ChatOpenAI(
             model=attacker_model.removeprefix("openai/"),
-            api_key=os.environ[attacker_key],
+            api_key=OPENAI_API_KEY,
             max_tokens=max_tokens,
             temperature=temperature,
         )
     else:
         llm = ChatGroq(
             model=attacker_model.removeprefix("groq/"),
-            api_key=os.environ[attacker_key],
+            api_key=GROQ_API_KEY,
             max_tokens=max_tokens,
             temperature=temperature,
         )
@@ -186,7 +185,7 @@ def attacker_node(state: EvalState) -> dict:
 def run_target_with_tools(prompt: str) -> tuple[str, list[dict]]:
     llm = ChatGroq(
         model=TARGET_MODEL.removeprefix("groq/"),
-        api_key=os.environ[TARGET_KEY],
+        api_key=GROQ_API_KEY,
         max_tokens=1200,
     ).bind_tools(LANGCHAIN_TOOLS)
     messages = [
@@ -273,7 +272,7 @@ def target_node(state: EvalState) -> dict:
     else:
         target_llm = ChatGroq(
             model=TARGET_MODEL.removeprefix("groq/"),
-            api_key=os.environ[TARGET_KEY],
+            api_key=GROQ_API_KEY,
             max_tokens=1200,
         )
         target_response = target_llm.invoke([
@@ -338,27 +337,26 @@ Instruction-following: fail if ANY stated constraint is violated, even if the re
 
 def run_judge(judge_cfg: dict, messages: list) -> JudgeVerdict:
     model = judge_cfg["model"]
-    api_key = os.environ[judge_cfg["api_key_env"]]
     max_tokens = 768 if model.startswith("cerebras/") else 400
 
     if model.startswith("groq/"):
         llm = ChatGroq(
             model=model.removeprefix("groq/"),
-            api_key=api_key,
+            api_key=GROQ_API_KEY,
             max_tokens=max_tokens,
             temperature=0.0,
         )
     elif model.startswith("openai/"):
         llm = ChatOpenAI(
             model=model.removeprefix("openai/"),
-            api_key=api_key,
+            api_key=OPENAI_API_KEY,
             max_tokens=max_tokens,
             temperature=0.0,
         )
     else:
         llm = ChatOpenAI(
             model=model.removeprefix("cerebras/"),
-            api_key=api_key,
+            api_key=CEREBRAS_API_KEY,
             base_url=CEREBRAS_BASE,
             default_headers={"X-Cerebras-3rd-Party-Integration": "adversabench"},
             max_tokens=max_tokens,
@@ -377,7 +375,7 @@ def run_judge(judge_cfg: dict, messages: list) -> JudgeVerdict:
     fallback_model = JUDGE_FALLBACK["model"]
     fallback_llm = ChatGroq(
         model=fallback_model.removeprefix("groq/"),
-        api_key=os.environ[JUDGE_FALLBACK["api_key_env"]],
+        api_key=GROQ_API_KEY,
         max_tokens=400,
         temperature=0.0,
     )
@@ -389,7 +387,6 @@ def run_judge(judge_cfg: dict, messages: list) -> JudgeVerdict:
 def run_meta_judge(state: EvalState, automated: dict, prior_results: list[dict]) -> dict:
     cfg = META_JUDGE_CFG or {}
     model = cfg["model"]
-    key_env = cfg.get("api_key_env", "OPENAI_API_KEY")
     name = cfg.get("name", "openai-meta")
 
     summary = "\n".join(
@@ -426,7 +423,7 @@ Rules:
     print("  split vote — gpt-4o-mini picks")
     meta_llm = ChatOpenAI(
         model=model.removeprefix("openai/"),
-        api_key=os.environ[key_env],
+        api_key=OPENAI_API_KEY,
         max_tokens=500,
         temperature=0.0,
     )
