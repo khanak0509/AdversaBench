@@ -5,7 +5,7 @@ import json
 import os
 import time
 from datetime import datetime, timezone
-from typing import Literal, TypedDict
+from typing import Literal
 
 import yaml
 from dotenv import load_dotenv
@@ -15,7 +15,7 @@ from langchain_openai import ChatOpenAI
 from langgraph.graph import END, StateGraph
 
 from checks import reasoning_formula_drift, run_automated_checks
-from models import AttackerOutput, ConsensusFlag, JudgeVerdict, normalize_judge_data
+from models import AttackerOutput, ConsensusFlag, EvalState, JudgeVerdict, normalize_judge_data
 from mutation import build_attacker_messages, epsilon_greedy_operator
 from tools import LANGCHAIN_TOOLS, TOOL_BY_NAME
 
@@ -60,26 +60,6 @@ def meta_judge_enabled() -> bool:
     if not META_JUDGE_CFG:
         return False
     return bool(OPENAI_API_KEY)
-
-
-class EvalState(TypedDict):
-    seed_id: str
-    seed_prompt: str
-    expected_behavior: str
-    reference_answer: str
-    ambiguity_note: str
-    category: str
-    adversarial_prompt: str
-    mutation_operator: str
-    mutation_history: list[dict]
-    target_response: str
-    tool_trace: list[dict]
-    judge_results: list[dict]
-    target_failed: bool
-    consensus_flag: str
-    difficulty_score: float
-    iteration: int
-    done: bool
 
 
 def load_seeds() -> list[dict]:
@@ -148,13 +128,13 @@ def attacker_node(state: EvalState) -> dict:
         attacker_model = ATTACKER_ESCALATION["model"]
         max_tokens = 800
         temperature = float(ATTACKER_ESCALATION.get("temperature", 0.7))
-        tag = " · openai"
+        tag = ", openai"
     else:
         attacker_model = ATTACKER_MODEL
         max_tokens = 800
         temperature = 0.3
         tag = ""
-    print(f"  iter {iteration + 1} · {operator}{tag}")
+    print(f"  iter {iteration + 1}, {operator}{tag}")
 
     if attacker_model.startswith("openai/"):
         llm = ChatOpenAI(
@@ -248,7 +228,7 @@ def run_target_with_tools(prompt: str) -> tuple[str, list[dict]]:
                     "result": str(tool_result),
                 }
             )
-            print(f"    {tool_name} → {tool_result}")
+            print(f"    {tool_name}: {tool_result}")
             messages.append(
                 ToolMessage(
                     content=str(tool_result),
@@ -284,7 +264,7 @@ def target_node(state: EvalState) -> dict:
         tool_trace = []
 
     preview = target_response[:90].replace("\n", " ")
-    print(f"  target → {preview}{'…' if len(target_response) > 90 else ''}")
+    print(f"  target: {preview}{'…' if len(target_response) > 90 else ''}")
     return {
         "target_response": target_response,
         "tool_trace": tool_trace,
@@ -420,7 +400,7 @@ Rules:
     if state.get("tool_trace"):
         user += f"\nTool trace: {json.dumps(state['tool_trace'])}"
 
-    print("  split vote — gpt-4o-mini picks")
+    print("  split vote, meta-judge")
     meta_llm = ChatOpenAI(
         model=model.removeprefix("openai/"),
         api_key=OPENAI_API_KEY,
@@ -434,7 +414,7 @@ Rules:
     time.sleep(API_SLEEP)
     verdict = JudgeVerdict.model_validate(normalize_judge_data(verdict.model_dump()))
     vote = "fail" if verdict.failure_detected else "pass"
-    print(f"  meta → {vote}")
+    print(f"  meta: {vote}")
     return {
         "judge": name,
         "model": model,
@@ -582,11 +562,11 @@ def judge_node(state: EvalState) -> dict:
 
     difficulty = round(state["iteration"] / MAX_ITERATIONS, 3)
     if target_failed:
-        print(f"  → {flag}, saving")
+        print(f"  {flag}, saving")
     elif state["iteration"] >= MAX_ITERATIONS:
-        print(f"  → max iters, moving on")
+        print(f"  max iters, done")
     else:
-        print(f"  → not broken yet, mutating again")
+        print(f"  still passing, retry")
 
     return {
         "judge_results": results,
@@ -758,7 +738,7 @@ if __name__ == "__main__":
 
     if args.force_all:
         completed = set()
-        print("force-all — rerunning everything, ignoring checkpoint\n")
+        print("force-all, ignoring checkpoint\n")
     elif args.seeds:
         wanted = set(args.seeds)
         seeds = [s for s in seeds if s["id"] in wanted]
@@ -769,17 +749,17 @@ if __name__ == "__main__":
             completed -= wanted
 
     skip_note = f", {len(completed)} already done" if completed else ""
-    print(f"\nAdversaBench v{RUN_VERSION} · {len(seeds)} seeds{skip_note}\n")
+    print(f"\n{len(seeds)} seeds{skip_note}\n")
 
     for seed in seeds:
         if seed["id"] in completed:
             continue
 
-        print(f"--- {seed['id']} ({seed['category']}) ---")
+        print(f"{seed['id']} ({seed['category']})")
         app.invoke(initial_state(seed))
         time.sleep(SEED_SLEEP)
 
     if os.path.exists(OUTPUT_PATH):
         with open(OUTPUT_PATH) as f:
             export_tiered_datasets(json.load(f))
-    print(f"\ndone → {OUTPUT_PATH}")
+    print(f"\ndone: {OUTPUT_PATH}")
