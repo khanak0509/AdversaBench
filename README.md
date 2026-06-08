@@ -144,7 +144,6 @@ OPENAI_API_KEY=...
 ```bash
 python main.py                   # full run (30 seeds)
 python main.py --seed tool-002 --force   # single seed
-python validate.py               # dataset QA
 python audit.py                  # score clean tier
 python inter_judge_analysis.py   # judge leniency + agreement stats
 ```
