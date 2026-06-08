@@ -40,7 +40,7 @@ Score 1-5:
 
 if __name__ == "__main__":
     if not INPUT.exists():
-        print(f"no {INPUT} — run main.py first")
+        print(f"no {INPUT}, run main.py first")
         raise SystemExit(1)
 
     rows = json.loads(INPUT.read_text())
@@ -64,9 +64,9 @@ if __name__ == "__main__":
             ])
             row = {**row, "audit": result.model_dump()}
             if result.quality_score < 4:
-                print(f"  {row['seed_id']}: {result.quality_score}/5 — {result.summary[:60]}")
+                print(f"  {row['seed_id']}: {result.quality_score}/5, {result.summary[:60]}")
         except Exception as error:
-            print(f"  {row['seed_id']}: err — {error}")
+            print(f"  {row['seed_id']}: err, {error}")
         audited.append(row)
 
     OUTPUT.write_text(json.dumps(audited, indent=2))

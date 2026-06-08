@@ -4,9 +4,11 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
-
+import os 
+from dotenv import load_dotenv
 from sklearn.metrics import cohen_kappa_score
 
+load_dotenv()
 JUDGES = [
     ("llama-70b", "Llama 70B"),
     ("cerebras-gpt-oss", "Cerebras GPT-OSS 120B"),
@@ -62,7 +64,7 @@ def main() -> int:
     rows = json.loads(input_path.read_text())
     n = len(rows)
 
-    print(f"judge analysis · {n} rows\n")
+    print(f"judge analysis, {n} rows\n")
 
     leniency_stats = {key: {"pass": 0, "fail": 0} for key, _ in JUDGES}
     row_verdicts: list[dict[str, bool]] = []
@@ -161,7 +163,7 @@ def main() -> int:
         ],
     }
     Path(args.output).write_text(json.dumps(out, indent=2))
-    print(f"\nsaved {args.output}")
+    print(f"\nwrote {args.output}")
     return 0
 
 
