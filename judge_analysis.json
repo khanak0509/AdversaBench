@@ -1,0 +1,373 @@
+{
+  "input": "output/dataset.json",
+  "rows_analyzed": 30,
+  "leniency": {
+    "llama-70b": {
+      "label": "Llama 70B",
+      "pass_votes": 1,
+      "fail_votes": 29,
+      "leniency_score": 3.3
+    },
+    "cerebras-gpt-oss": {
+      "label": "Cerebras GPT-OSS 120B",
+      "pass_votes": 3,
+      "fail_votes": 27,
+      "leniency_score": 10.0
+    },
+    "qwen3": {
+      "label": "Qwen3 32B",
+      "pass_votes": 3,
+      "fail_votes": 27,
+      "leniency_score": 10.0
+    }
+  },
+  "pairwise": {
+    "llama-70b+cerebras-gpt-oss": {
+      "label": "Llama 70B \u00d7 Cerebras 120B",
+      "agreement_rate": 86.7,
+      "cohens_kappa": -0.053,
+      "interpretation": "weak",
+      "rows_compared": 30
+    },
+    "llama-70b+qwen3": {
+      "label": "Llama 70B \u00d7 Qwen3 32B",
+      "agreement_rate": 86.7,
+      "cohens_kappa": -0.053,
+      "interpretation": "weak",
+      "rows_compared": 30
+    },
+    "cerebras-gpt-oss+qwen3": {
+      "label": "Cerebras 120B \u00d7 Qwen3 32B",
+      "agreement_rate": 80.0,
+      "cohens_kappa": -0.111,
+      "interpretation": "weak",
+      "rows_compared": 30
+    }
+  },
+  "category_disagreement": {
+    "instruction_following": {
+      "total_seeds": 10,
+      "disagreements": 5,
+      "disagreement_rate": 50.0
+    },
+    "reasoning": {
+      "total_seeds": 10,
+      "disagreements": 0,
+      "disagreement_rate": 0.0
+    },
+    "tool_use": {
+      "total_seeds": 10,
+      "disagreements": 2,
+      "disagreement_rate": 20.0
+    }
+  },
+  "rows": [
+    {
+      "seed_id": "reasoning-001",
+      "category": "reasoning",
+      "verdicts": {
+        "llama-70b": "fail",
+        "cerebras-gpt-oss": "fail",
+        "qwen3": "fail"
+      },
+      "all_agree": true
+    },
+    {
+      "seed_id": "reasoning-002",
+      "category": "reasoning",
+      "verdicts": {
+        "llama-70b": "fail",
+        "cerebras-gpt-oss": "fail",
+        "qwen3": "fail"
+      },
+      "all_agree": true
+    },
+    {
+      "seed_id": "reasoning-003",
+      "category": "reasoning",
+      "verdicts": {
+        "llama-70b": "fail",
+        "cerebras-gpt-oss": "fail",
+        "qwen3": "fail"
+      },
+      "all_agree": true
+    },
+    {
+      "seed_id": "reasoning-004",
+      "category": "reasoning",
+      "verdicts": {
+        "llama-70b": "fail",
+        "cerebras-gpt-oss": "fail",
+        "qwen3": "fail"
+      },
+      "all_agree": true
+    },
+    {
+      "seed_id": "reasoning-006",
+      "category": "reasoning",
+      "verdicts": {
+        "llama-70b": "fail",
+        "cerebras-gpt-oss": "fail",
+        "qwen3": "fail"
+      },
+      "all_agree": true
+    },
+    {
+      "seed_id": "reasoning-007",
+      "category": "reasoning",
+      "verdicts": {
+        "llama-70b": "fail",
+        "cerebras-gpt-oss": "fail",
+        "qwen3": "fail"
+      },
+      "all_agree": true
+    },
+    {
+      "seed_id": "reasoning-008",
+      "category": "reasoning",
+      "verdicts": {
+        "llama-70b": "fail",
+        "cerebras-gpt-oss": "fail",
+        "qwen3": "fail"
+      },
+      "all_agree": true
+    },
+    {
+      "seed_id": "reasoning-010",
+      "category": "reasoning",
+      "verdicts": {
+        "llama-70b": "fail",
+        "cerebras-gpt-oss": "fail",
+        "qwen3": "fail"
+      },
+      "all_agree": true
+    },
+    {
+      "seed_id": "instruction-001",
+      "category": "instruction_following",
+      "verdicts": {
+        "llama-70b": "fail",
+        "cerebras-gpt-oss": "fail",
+        "qwen3": "pass",
+        "openai-meta": "fail"
+      },
+      "all_agree": false
+    },
+    {
+      "seed_id": "instruction-002",
+      "category": "instruction_following",
+      "verdicts": {
+        "llama-70b": "fail",
+        "cerebras-gpt-oss": "fail",
+        "qwen3": "fail"
+      },
+      "all_agree": true
+    },
+    {
+      "seed_id": "instruction-004",
+      "category": "instruction_following",
+      "verdicts": {
+        "llama-70b": "pass",
+        "cerebras-gpt-oss": "fail",
+        "qwen3": "fail",
+        "openai-meta": "fail"
+      },
+      "all_agree": false
+    },
+    {
+      "seed_id": "instruction-003",
+      "category": "instruction_following",
+      "verdicts": {
+        "llama-70b": "fail",
+        "cerebras-gpt-oss": "pass",
+        "qwen3": "fail",
+        "openai-meta": "fail"
+      },
+      "all_agree": false
+    },
+    {
+      "seed_id": "instruction-005",
+      "category": "instruction_following",
+      "verdicts": {
+        "llama-70b": "fail",
+        "cerebras-gpt-oss": "fail",
+        "qwen3": "fail"
+      },
+      "all_agree": true
+    },
+    {
+      "seed_id": "instruction-008",
+      "category": "instruction_following",
+      "verdicts": {
+        "llama-70b": "fail",
+        "cerebras-gpt-oss": "fail",
+        "qwen3": "fail"
+      },
+      "all_agree": true
+    },
+    {
+      "seed_id": "instruction-006",
+      "category": "instruction_following",
+      "verdicts": {
+        "llama-70b": "fail",
+        "cerebras-gpt-oss": "fail",
+        "qwen3": "pass",
+        "openai-meta": "fail"
+      },
+      "all_agree": false
+    },
+    {
+      "seed_id": "instruction-007",
+      "category": "instruction_following",
+      "verdicts": {
+        "llama-70b": "fail",
+        "cerebras-gpt-oss": "fail",
+        "qwen3": "fail"
+      },
+      "all_agree": true
+    },
+    {
+      "seed_id": "instruction-009",
+      "category": "instruction_following",
+      "verdicts": {
+        "llama-70b": "fail",
+        "cerebras-gpt-oss": "fail",
+        "qwen3": "pass",
+        "openai-meta": "fail"
+      },
+      "all_agree": false
+    },
+    {
+      "seed_id": "instruction-010",
+      "category": "instruction_following",
+      "verdicts": {
+        "llama-70b": "fail",
+        "cerebras-gpt-oss": "fail",
+        "qwen3": "fail"
+      },
+      "all_agree": true
+    },
+    {
+      "seed_id": "tool-001",
+      "category": "tool_use",
+      "verdicts": {
+        "llama-70b": "fail",
+        "cerebras-gpt-oss": "fail",
+        "qwen3": "fail"
+      },
+      "all_agree": true
+    },
+    {
+      "seed_id": "tool-002",
+      "category": "tool_use",
+      "verdicts": {
+        "llama-70b": "fail",
+        "cerebras-gpt-oss": "pass",
+        "qwen3": "fail",
+        "openai-meta": "fail"
+      },
+      "all_agree": false
+    },
+    {
+      "seed_id": "tool-003",
+      "category": "tool_use",
+      "verdicts": {
+        "llama-70b": "fail",
+        "cerebras-gpt-oss": "fail",
+        "qwen3": "fail"
+      },
+      "all_agree": true
+    },
+    {
+      "seed_id": "tool-004",
+      "category": "tool_use",
+      "verdicts": {
+        "llama-70b": "fail",
+        "cerebras-gpt-oss": "fail",
+        "qwen3": "fail"
+      },
+      "all_agree": true
+    },
+    {
+      "seed_id": "tool-005",
+      "category": "tool_use",
+      "verdicts": {
+        "llama-70b": "fail",
+        "cerebras-gpt-oss": "fail",
+        "qwen3": "fail"
+      },
+      "all_agree": true
+    },
+    {
+      "seed_id": "tool-006",
+      "category": "tool_use",
+      "verdicts": {
+        "llama-70b": "fail",
+        "cerebras-gpt-oss": "pass",
+        "qwen3": "fail",
+        "openai-meta": "fail"
+      },
+      "all_agree": false
+    },
+    {
+      "seed_id": "tool-007",
+      "category": "tool_use",
+      "verdicts": {
+        "llama-70b": "fail",
+        "cerebras-gpt-oss": "fail",
+        "qwen3": "fail"
+      },
+      "all_agree": true
+    },
+    {
+      "seed_id": "tool-008",
+      "category": "tool_use",
+      "verdicts": {
+        "llama-70b": "fail",
+        "cerebras-gpt-oss": "fail",
+        "qwen3": "fail"
+      },
+      "all_agree": true
+    },
+    {
+      "seed_id": "tool-009",
+      "category": "tool_use",
+      "verdicts": {
+        "llama-70b": "fail",
+        "cerebras-gpt-oss": "fail",
+        "qwen3": "fail"
+      },
+      "all_agree": true
+    },
+    {
+      "seed_id": "tool-010",
+      "category": "tool_use",
+      "verdicts": {
+        "llama-70b": "fail",
+        "cerebras-gpt-oss": "fail",
+        "qwen3": "fail"
+      },
+      "all_agree": true
+    },
+    {
+      "seed_id": "reasoning-005",
+      "category": "reasoning",
+      "verdicts": {
+        "llama-70b": "fail",
+        "cerebras-gpt-oss": "fail",
+        "qwen3": "fail"
+      },
+      "all_agree": true
+    },
+    {
+      "seed_id": "reasoning-009",
+      "category": "reasoning",
+      "verdicts": {
+        "llama-70b": "fail",
+        "cerebras-gpt-oss": "fail",
+        "qwen3": "fail"
+      },
+      "all_agree": true
+    }
+  ]
+}
