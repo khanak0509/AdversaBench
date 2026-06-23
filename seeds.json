@@ -31,7 +31,7 @@
     "id": "reasoning-005",
     "category": "reasoning",
     "prompt": "I have 6 eggs. I broke 2, cooked 2, and ate 2. How many do I have left?",
-    "expected_behavior": "Answer 6 eggs — 'how many do I have left' means eggs still in your possession; broken/cooked/eaten eggs count unless explicitly thrown away.",
+    "expected_behavior": "Answer 6 eggs \u2014 'how many do I have left' means eggs still in your possession; broken/cooked/eaten eggs count unless explicitly thrown away.",
     "reference_answer": "6",
     "ambiguity_note": "Tier B: 0 is defensible in casual English; benchmark ground truth is possession-based."
   },
@@ -209,5 +209,110 @@
     "prompt": "Use the weather API to get the temperature of the exact center of the ocean.",
     "expected_behavior": "Use weather_api and handle no-station-at-ocean-center error.",
     "reference_answer": "handle ocean center error"
+  },
+  {
+    "id": "reasoning-011",
+    "category": "reasoning",
+    "prompt": "A father and son are in a car crash. The father dies. The son is taken to the hospital. The surgeon says, 'I can't operate on him, he's my son.' How is this possible?",
+    "expected_behavior": "Recognize that the surgeon is the boy's mother.",
+    "reference_answer": "the surgeon is his mother"
+  },
+  {
+    "id": "reasoning-012",
+    "category": "reasoning",
+    "prompt": "If you are running a race and you overtake the person in second place, what position are you in?",
+    "expected_behavior": "State that you are in second place, not first.",
+    "reference_answer": "second place"
+  },
+  {
+    "id": "reasoning-013",
+    "category": "reasoning",
+    "prompt": "Mary's father has five daughters: Nana, Nene, Nini, Nono, and...",
+    "expected_behavior": "Identify that the fifth daughter is Mary.",
+    "reference_answer": "Mary"
+  },
+  {
+    "id": "reasoning-014",
+    "category": "reasoning",
+    "prompt": "A cow is tied to a 10-foot rope. There is a bale of hay 15 feet away. How does the cow reach the hay?",
+    "expected_behavior": "Realize that the other end of the rope isn't tied to anything.",
+    "reference_answer": "rope is not tied to anything"
+  },
+  {
+    "id": "reasoning-015",
+    "category": "reasoning",
+    "prompt": "You are in a race and you pass the person in last place. What place are you in?",
+    "expected_behavior": "Recognize the logical impossibility: you cannot pass the person in last place because if you are behind them, you are in last place.",
+    "reference_answer": "impossible to pass last place"
+  },
+  {
+    "id": "instruction-011",
+    "category": "instruction_following",
+    "prompt": "Answer yes or no but wrap the result in valid JSON with key 'response'. Provide no other text.",
+    "expected_behavior": "Output only a JSON object like {'response': 'yes'} with absolutely no markdown formatting or conversational filler.",
+    "reference_answer": "valid json only"
+  },
+  {
+    "id": "instruction-012",
+    "category": "instruction_following",
+    "prompt": "Write a list of three animals, where the second animal must start with the last letter of the first animal, and the third with the last letter of the second.",
+    "expected_behavior": "Follow the word chain constraint perfectly (e.g. Dog -> Goat -> Tiger).",
+    "reference_answer": "animal word chain"
+  },
+  {
+    "id": "instruction-013",
+    "category": "instruction_following",
+    "prompt": "Output exactly the string 'ERROR' and nothing else. Do not apologize or explain.",
+    "expected_behavior": "Output ERROR without any 'Here is the string:' prefixes.",
+    "reference_answer": "ERROR"
+  },
+  {
+    "id": "instruction-014",
+    "category": "instruction_following",
+    "prompt": "Describe a square without using the words 'four', 'sides', 'equal', or 'angles'.",
+    "expected_behavior": "Describe the geometry successfully avoiding the banned words.",
+    "reference_answer": "square without banned words"
+  },
+  {
+    "id": "instruction-015",
+    "category": "instruction_following",
+    "prompt": "Write a sentence that contains the word 'apple' but do not use the letter 'a' anywhere in the sentence.",
+    "expected_behavior": "Address the impossible constraint directly, since 'apple' contains the letter 'a'.",
+    "reference_answer": "address impossible constraint"
+  },
+  {
+    "id": "tool-011",
+    "category": "tool_use",
+    "prompt": "Calculate the sum of 10 and the result of dividing 5 by 0.",
+    "expected_behavior": "Use the calculator tool and handle the divide by zero error gracefully.",
+    "reference_answer": "handle divide by zero"
+  },
+  {
+    "id": "tool-012",
+    "category": "tool_use",
+    "prompt": "Use the translate API to translate 'bonjour' from French to French.",
+    "expected_behavior": "Recognize the redundancy or handle the translate API returning the exact same word.",
+    "reference_answer": "handle redundant translation"
+  },
+  {
+    "id": "tool-013",
+    "category": "tool_use",
+    "prompt": "Search for the current weather in a city named 'NullPointerExceptionError'.",
+    "expected_behavior": "Use weather API and handle the city-not-found error.",
+    "reference_answer": "handle city not found"
+  },
+  {
+    "id": "tool-014",
+    "category": "tool_use",
+    "prompt": "Write and execute python code that loops infinitely and never prints anything.",
+    "expected_behavior": "Refuse to execute an infinite loop or handle the execution timeout gracefully.",
+    "reference_answer": "handle code timeout"
+  },
+  {
+    "id": "tool-015",
+    "category": "tool_use",
+    "prompt": "Add an event to my calendar for yesterday at 12:00 PM.",
+    "expected_behavior": "Use the calendar tool and report that you cannot schedule events in the past, or handle the tool error.",
+    "reference_answer": "handle past date error"
   }
 ]
