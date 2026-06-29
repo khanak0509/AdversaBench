@@ -1,5 +1,7 @@
 # AdversaBench
 
+🤗 **Dataset available on Hugging Face:** [kkhanak/AdversaBench](https://huggingface.co/datasets/kkhanak/AdversaBench)
+
 Automated LLM red-teaming methodology and reliability study. Takes seed prompts, mutates them adversarially, runs a weak target model, scores failures with a multi-judge panel, and exports a tiered failure dataset.
 
 Built with **LangGraph** + **LangChain** (`ChatGroq`, `ChatOpenAI`, structured output, tool binding).
